@@ -1,6 +1,9 @@
 package me.hu6r1s.oauth2.global.response;
 
-public enum CommonResponse {
+import lombok.Getter;
+
+@Getter
+public enum ResponseCode {
   SUCCESS("SU", "Success."),
 
   VALIDATION_FAIL("VF", "Validation failed."),
@@ -14,7 +17,7 @@ public enum CommonResponse {
   private final String code;
   private final String message;
 
-  private CommonResponse(String code, String message) {
+  ResponseCode(String code, String message) {
     this.code = code;
     this.message = message;
   }
