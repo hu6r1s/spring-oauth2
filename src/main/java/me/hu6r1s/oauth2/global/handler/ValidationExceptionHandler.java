@@ -1,4 +1,4 @@
-package me.hu6r1s.oauth2.global.exception;
+package me.hu6r1s.oauth2.global.handler;
 
 import me.hu6r1s.oauth2.dto.response.CertificationResponseDto;
 import me.hu6r1s.oauth2.global.response.ResponseCode;
