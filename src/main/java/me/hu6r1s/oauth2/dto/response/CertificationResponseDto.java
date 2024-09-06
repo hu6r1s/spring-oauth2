@@ -3,6 +3,8 @@ package me.hu6r1s.oauth2.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.hu6r1s.oauth2.global.response.ResponseCode;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @Getter
 @AllArgsConstructor
