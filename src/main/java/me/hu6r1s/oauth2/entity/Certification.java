@@ -26,5 +26,11 @@ public class Certification {
   private String certificationNumber;
 
   @Column(name = "user_id")
-  private Long userId;
+  private String userId;
+
+  public Certification(String userId, String email, String certificationNumber) {
+    this.userId = userId;
+    this.email = email;
+    this.certificationNumber = certificationNumber;
+  }
 }

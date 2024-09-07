@@ -13,7 +13,8 @@ public enum ResponseCode {
   SIGN_IN_FAIL("SF", HttpStatus.UNAUTHORIZED, "Login information mismatch."),
   CERTIFICATION_FAIL("CF", HttpStatus.UNAUTHORIZED, "Certification failed."),
 
-  DATABASE_ERROR("DBE", HttpStatus.INTERNAL_SERVER_ERROR, "Database error.");
+  DATABASE_ERROR("DBE", HttpStatus.INTERNAL_SERVER_ERROR, "Database error."),
+  MAIL_FAIL("MF", HttpStatus.INTERNAL_SERVER_ERROR, "Mail send failed.");
 
   private final String code;
   private final HttpStatus status;

@@ -36,7 +36,17 @@ public class MailProvider {
   private String getCertificationMessage(String certificationNumber) {
     String certificationMessage = "";
     certificationMessage += "<h1 style='text-align: center;'>[TEST 메일] 인증메일 테스트 제목</h1>";
-    certificationMessage += "<h3 style='text-align: center'>인증코두 : <strong style='font-size: 32px; letter-spacing: 8px;'>" + certificationNumber + "</strong></h3>";
+    certificationMessage +=
+        "<h3 style='text-align: center'>인증코드 : <strong style='font-size: 32px; letter-spacing: 8px;'>"
+            + certificationNumber + "</strong></h3>";
     return certificationMessage;
+  }
+
+  public String getCertificationNumber() {
+    String certificationNumber = "";
+    for (int count = 0; count < 4; count++) {
+      certificationNumber += (int) (Math.random() * 10);
+    }
+    return certificationNumber;
   }
 }

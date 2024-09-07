@@ -3,7 +3,8 @@ package me.hu6r1s.oauth2.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.hu6r1s.oauth2.dto.request.IdCheckRequestDto;
-import me.hu6r1s.oauth2.dto.response.IdCheckResponseDto;
+import me.hu6r1s.oauth2.dto.request.MailCertificationRequestDto;
+import me.hu6r1s.oauth2.dto.response.CertificationResponseDto;
 import me.hu6r1s.oauth2.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,18 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/id-check")
-  public ResponseEntity<IdCheckResponseDto> idCheck(
+  public ResponseEntity<CertificationResponseDto> idCheck(
       @RequestBody @Valid IdCheckRequestDto requestDto
   ) {
     authService.idCheck(requestDto);
-    return IdCheckResponseDto.success();
+    return CertificationResponseDto.success();
+  }
+
+  @PostMapping("/email-certification")
+  public ResponseEntity<CertificationResponseDto> mailCertification(
+    @RequestBody @Valid MailCertificationRequestDto requestDto
+  ) {
+    authService.mailCertification(requestDto);
+    return CertificationResponseDto.success();
   }
 }
