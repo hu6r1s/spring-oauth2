@@ -2,6 +2,7 @@ package me.hu6r1s.oauth2.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.hu6r1s.oauth2.dto.request.CheckCertificationRequestDto;
 import me.hu6r1s.oauth2.dto.request.IdCheckRequestDto;
 import me.hu6r1s.oauth2.dto.request.MailCertificationRequestDto;
 import me.hu6r1s.oauth2.dto.response.CertificationResponseDto;
@@ -32,6 +33,14 @@ public class AuthController {
     @RequestBody @Valid MailCertificationRequestDto requestDto
   ) {
     authService.mailCertification(requestDto);
+    return CertificationResponseDto.success();
+  }
+
+  @PostMapping("/check-certification")
+  public ResponseEntity<CertificationResponseDto> checkCertification(
+    @RequestBody @Valid CheckCertificationRequestDto requestDto
+  ) {
+    authService.checkCertification(requestDto);
     return CertificationResponseDto.success();
   }
 }

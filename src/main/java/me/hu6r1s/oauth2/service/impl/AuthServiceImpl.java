@@ -2,6 +2,7 @@ package me.hu6r1s.oauth2.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import me.hu6r1s.oauth2.dto.request.CheckCertificationRequestDto;
 import me.hu6r1s.oauth2.dto.request.IdCheckRequestDto;
 import me.hu6r1s.oauth2.dto.request.MailCertificationRequestDto;
 import me.hu6r1s.oauth2.entity.Certification;
@@ -60,6 +61,35 @@ public class AuthServiceImpl implements AuthService {
 
       Certification certification = new Certification(userId, email, certificationNumber);
       certificationRepository.save(certification);
+    } catch (DataAccessException e) {
+      throw new CustomException(ResponseCode.DATABASE_ERROR.getCode(),
+          ResponseCode.DATABASE_ERROR.getStatus(), ResponseCode.DATABASE_ERROR.getMessage());
+    }
+  }
+
+  @Override
+  public void checkCertification(CheckCertificationRequestDto requestDto) {
+    try {
+      String userId = requestDto.getUserId();
+      String email = requestDto.getEmail();
+      String certificationNumber = requestDto.getCertificationNumber();
+
+      Certification certification = certificationRepository.findByUserId(userId);
+      if (certification == null) {
+        throw new CustomException(ResponseCode.CERTIFICATION_FAIL.getCode(),
+            ResponseCode.CERTIFICATION_FAIL.getStatus(),
+            ResponseCode.CERTIFICATION_FAIL.getMessage());
+      }
+
+      boolean isMatched =
+          certification.getEmail().equals(email) && certification.getCertificationNumber()
+              .equals(certificationNumber);
+      if (!isMatched) {
+        throw new CustomException(ResponseCode.CERTIFICATION_FAIL.getCode(),
+            ResponseCode.CERTIFICATION_FAIL.getStatus(),
+            ResponseCode.CERTIFICATION_FAIL.getMessage());
+      }
+
     } catch (DataAccessException e) {
       throw new CustomException(ResponseCode.DATABASE_ERROR.getCode(),
           ResponseCode.DATABASE_ERROR.getStatus(), ResponseCode.DATABASE_ERROR.getMessage());
