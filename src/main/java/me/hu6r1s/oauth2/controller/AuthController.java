@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.hu6r1s.oauth2.dto.request.CheckCertificationRequestDto;
 import me.hu6r1s.oauth2.dto.request.IdCheckRequestDto;
 import me.hu6r1s.oauth2.dto.request.MailCertificationRequestDto;
+import me.hu6r1s.oauth2.dto.request.SignUpRequestDto;
 import me.hu6r1s.oauth2.dto.response.CertificationResponseDto;
 import me.hu6r1s.oauth2.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class AuthController {
 
   @PostMapping("/email-certification")
   public ResponseEntity<CertificationResponseDto> mailCertification(
-    @RequestBody @Valid MailCertificationRequestDto requestDto
+      @RequestBody @Valid MailCertificationRequestDto requestDto
   ) {
     authService.mailCertification(requestDto);
     return CertificationResponseDto.success();
@@ -38,9 +39,17 @@ public class AuthController {
 
   @PostMapping("/check-certification")
   public ResponseEntity<CertificationResponseDto> checkCertification(
-    @RequestBody @Valid CheckCertificationRequestDto requestDto
+      @RequestBody @Valid CheckCertificationRequestDto requestDto
   ) {
     authService.checkCertification(requestDto);
+    return CertificationResponseDto.success();
+  }
+
+  @PostMapping("/signup")
+  public ResponseEntity<CertificationResponseDto> signup(
+    @RequestBody @Valid SignUpRequestDto requestDto
+  ) {
+    authService.signup(requestDto);
     return CertificationResponseDto.success();
   }
 }

@@ -2,6 +2,8 @@ package me.hu6r1s.oauth2.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,5 +35,14 @@ public class User {
   private String type;
 
   @Column
-  private String role;
+  @Enumerated(EnumType.STRING)
+  private UserRole role;
+
+  public User(String userId, String password, String email) {
+    this.userId = userId;
+    this.password = password;
+    this.email = email;
+    this.type = "app";
+    this.role = UserRole.USER;
+  }
 }

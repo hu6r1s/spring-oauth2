@@ -1,6 +1,7 @@
 package me.hu6r1s.oauth2.global.config;
 
 import lombok.RequiredArgsConstructor;
+import me.hu6r1s.oauth2.entity.UserRole;
 import me.hu6r1s.oauth2.global.filter.JwtAuthenticationFilter;
 import me.hu6r1s.oauth2.global.handler.FailedAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,6 +28,10 @@ public class WebSecurityConfig {
   private final FailedAuthenticationEntryPoint failedAuthenticationEntryPoint;
 
   @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+  @Bean
   protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -35,7 +42,7 @@ public class WebSecurityConfig {
             ))
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
             .requestMatchers("/", "/api/v1/auth/**").permitAll()
-            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+            .requestMatchers("/api/v1/admin/**").hasRole(UserRole.ADMIN.name())
             .anyRequest().authenticated()
         )
         .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
