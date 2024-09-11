@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import me.hu6r1s.oauth2.dto.request.CheckCertificationRequestDto;
 import me.hu6r1s.oauth2.dto.request.IdCheckRequestDto;
 import me.hu6r1s.oauth2.dto.request.MailCertificationRequestDto;
+import me.hu6r1s.oauth2.dto.request.SignInRequestDto;
 import me.hu6r1s.oauth2.dto.request.SignUpRequestDto;
 import me.hu6r1s.oauth2.dto.response.CertificationResponseDto;
+import me.hu6r1s.oauth2.dto.response.SignInResponseDto;
 import me.hu6r1s.oauth2.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,5 +53,13 @@ public class AuthController {
   ) {
     authService.signup(requestDto);
     return CertificationResponseDto.success();
+  }
+
+  @PostMapping("/signin")
+  public ResponseEntity<SignInResponseDto> signin(
+      @RequestBody @Valid SignInRequestDto requestDto
+  ) {
+    String token = authService.signin(requestDto);
+    return SignInResponseDto.success(token);
   }
 }

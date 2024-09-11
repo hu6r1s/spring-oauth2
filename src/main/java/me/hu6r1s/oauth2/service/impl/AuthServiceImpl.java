@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import me.hu6r1s.oauth2.dto.request.CheckCertificationRequestDto;
 import me.hu6r1s.oauth2.dto.request.IdCheckRequestDto;
 import me.hu6r1s.oauth2.dto.request.MailCertificationRequestDto;
+import me.hu6r1s.oauth2.dto.request.SignInRequestDto;
 import me.hu6r1s.oauth2.dto.request.SignUpRequestDto;
+import me.hu6r1s.oauth2.dto.response.SignInResponseDto;
 import me.hu6r1s.oauth2.entity.Certification;
 import me.hu6r1s.oauth2.entity.User;
 import me.hu6r1s.oauth2.global.handler.CustomException;
+import me.hu6r1s.oauth2.global.provider.JwtProvider;
 import me.hu6r1s.oauth2.global.provider.MailProvider;
 import me.hu6r1s.oauth2.global.response.ResponseCode;
 import me.hu6r1s.oauth2.repository.CertificationRepository;
@@ -26,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
   private final CertificationRepository certificationRepository;
   private final MailProvider mailProvider;
   private final PasswordEncoder passwordEncoder;
+  private final JwtProvider jwtProvider;
 
   @Override
   public void idCheck(IdCheckRequestDto requestDto) {
@@ -133,5 +137,34 @@ public class AuthServiceImpl implements AuthService {
       throw new CustomException(ResponseCode.DATABASE_ERROR.getCode(),
           ResponseCode.DATABASE_ERROR.getStatus(), ResponseCode.DATABASE_ERROR.getMessage());
     }
+  }
+
+  @Override
+  public String signin(SignInRequestDto requestDto) {
+    String token = null;
+
+    try {
+      String userId = requestDto.getUserId();
+      User user = userRepository.findByUserId(userId);
+      if (user == null) {
+        throw new CustomException(ResponseCode.SIGN_IN_FAIL.getCode(),
+            ResponseCode.SIGN_IN_FAIL.getStatus(),
+            ResponseCode.SIGN_IN_FAIL.getMessage());
+      }
+      String password = requestDto.getPassword();
+      String encodedPassword = user.getPassword();
+      boolean isMatched = passwordEncoder.matches(password, encodedPassword);
+      if (!isMatched) {
+        throw new CustomException(ResponseCode.SIGN_IN_FAIL.getCode(),
+            ResponseCode.SIGN_IN_FAIL.getStatus(), ResponseCode.SIGN_IN_FAIL.getMessage());
+      }
+
+      token = jwtProvider.create(userId);
+    } catch (DataAccessException e) {
+      throw new CustomException(ResponseCode.DATABASE_ERROR.getCode(),
+          ResponseCode.DATABASE_ERROR.getStatus(), ResponseCode.DATABASE_ERROR.getMessage());
+    }
+
+    return token;
   }
 }
