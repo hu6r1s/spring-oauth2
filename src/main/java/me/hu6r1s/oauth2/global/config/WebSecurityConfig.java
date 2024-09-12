@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,11 +27,13 @@ public class WebSecurityConfig {
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final FailedAuthenticationEntryPoint failedAuthenticationEntryPoint;
+  private final DefaultOAuth2UserService oAuth2UserService;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
   @Bean
   protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
@@ -41,12 +44,17 @@ public class WebSecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS
             ))
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-            .requestMatchers("/", "/api/v1/auth/**").permitAll()
+            .requestMatchers("/", "/api/v1/auth/**", "oauth2/**").permitAll()
             .requestMatchers("/api/v1/admin/**").hasRole(UserRole.ADMIN.name())
             .anyRequest().authenticated()
         )
+        .oauth2Login(
+            oauth2 -> oauth2
+                .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
+        )
         .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
-            failedAuthenticationEntryPoint))
+        failedAuthenticationEntryPoint))
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return httpSecurity.build();
