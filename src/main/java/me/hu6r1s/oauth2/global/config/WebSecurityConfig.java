@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.hu6r1s.oauth2.entity.UserRole;
 import me.hu6r1s.oauth2.global.filter.JwtAuthenticationFilter;
 import me.hu6r1s.oauth2.global.handler.FailedAuthenticationEntryPoint;
+import me.hu6r1s.oauth2.global.handler.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,7 @@ public class WebSecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final FailedAuthenticationEntryPoint failedAuthenticationEntryPoint;
   private final DefaultOAuth2UserService oAuth2UserService;
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -50,8 +52,10 @@ public class WebSecurityConfig {
         )
         .oauth2Login(
             oauth2 -> oauth2
+                .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
                 .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
                 .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
+                .successHandler(oAuth2SuccessHandler)
         )
         .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
         failedAuthenticationEntryPoint))

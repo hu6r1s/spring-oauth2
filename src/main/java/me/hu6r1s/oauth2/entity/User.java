@@ -45,4 +45,12 @@ public class User {
     this.type = "app";
     this.role = UserRole.USER;
   }
+
+  public User(String userId, String email, String password, String type) {
+    this.userId = userId;
+    this.password = password;
+    this.email = email;
+    this.type = type;
+    this.role = UserRole.USER;
+  }
 }
