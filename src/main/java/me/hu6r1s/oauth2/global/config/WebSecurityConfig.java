@@ -47,6 +47,7 @@ public class WebSecurityConfig {
             ))
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
             .requestMatchers("/", "/api/v1/auth/**", "oauth2/**").permitAll()
+            .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
             .requestMatchers("/api/v1/admin/**").hasRole(UserRole.ADMIN.name())
             .anyRequest().authenticated()
         )
