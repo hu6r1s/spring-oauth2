@@ -33,8 +33,7 @@ public class AuthController {
   @Operation(summary = "유저 아이디 중복 체크", description = "유저 아이디가 중복되었는지 확인하는 API")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Success", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Validation failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Duplication Id", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Validation failed & Duplication Id", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
       @ApiResponse(responseCode = "500", description = "Database error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
   })
   @PostMapping("/id-check")
@@ -48,10 +47,8 @@ public class AuthController {
   @Operation(summary = "이메일 인증", description = "이메일로 인증 코드를 보내는 API")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Success", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Validation failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Duplication Id", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "500", description = "Mail Send failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "500", description = "Database error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Validation failed & Duplication Id", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
+      @ApiResponse(responseCode = "500", description = "Mail Send failed & Database error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
   })
   @PostMapping("/email-certification")
   public ResponseEntity<CertificationResponseDto> mailCertification(
@@ -79,8 +76,7 @@ public class AuthController {
   @Operation(summary = "회원가입", description = "유저 회원가입 API")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Success", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Validation failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Duplication", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Validation failed & Duplication Id", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
       @ApiResponse(responseCode = "401", description = "Certification failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
       @ApiResponse(responseCode = "500", description = "Database error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CertificationResponseDto.class))),
   })
